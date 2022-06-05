@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Article;
@@ -8,10 +8,15 @@ use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
-    public function allPost()
+    public function allPost(Request $request)
     {
+        $articles = Article::paginate(5);
+
         return response()->json([
-            Article::all()
+            'current_page' => $articles->currentPage(),
+            'total_pages' => $articles->lastPage(),
+            'total_articles' => $articles->total(),
+            'articles' => $articles->items()
         ]);
     }
 
